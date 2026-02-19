@@ -1,4 +1,5 @@
-import type { ComponentProps, ReactNode } from "react";
+import { useWatch } from "react-hook-form";
+import { useMemo, type ComponentProps, type ReactNode } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 import Icon from "./icon";
@@ -37,55 +38,77 @@ interface InputSingleFileProps
     VariantProps<typeof inputSingleFileVariants>,
     Omit<ComponentProps<"input">, "size"> {
   error?: ReactNode;
+  form: any;
 }
 
-export function InputSingleFile({ size, error }: InputSingleFileProps) {
+export function InputSingleFile({
+  size,
+  error,
+  form,
+  ...props
+}: InputSingleFileProps) {
+  const formValues = useWatch({ control: form.control });
+  const name = props.name || "";
+  const formFile: File = useMemo(
+    () => formValues[name]?.[0],
+    [formValues, name],
+  );
+
   return (
     <div>
-      <div className="w-full relative group cursor-pointer">
-        <input
-          type="file"
-          className="absolute top-0 right-0 w-full h-full opacity-0 cursor-pointer"
-        />
+      {!formFile ? (
+        <>
+          <div className="w-full relative group cursor-pointer">
+            <input
+              type="file"
+              className="absolute top-0 right-0 w-full h-full opacity-0 cursor-pointer"
+              {...props}
+            />
 
-        <div className={inputSingleFileVariants({ size })}>
-          <Icon
-            svg={UploadFileIcon}
-            className={inputSingleFileIconVariants()}
-          />
-          <Text variant="label-medium" className="text-placeholder text-center">
-            Arraste o arquivo aqui <br /> ou clique para selecionar
-          </Text>
-        </div>
-      </div>
-
-      {error && (
-        <Text variant="label-small" className="text-accent-red">
-          Erro no campo
-        </Text>
-      )}
-
-      <div className="flex gap-3 items-center border border-solid border-border-primary mt-5 p-3 rounded">
-        <Icon svg={FileImageIcon} className="fill-white w-6 h-6" />
-
-        <div className="flex flex-col items-start">
-          <div className="truncate max-w-80">
-            <Text variant="label-medium" className="text-placeholder">
-              Nome do arquivo.png
-            </Text>
+            <div className={inputSingleFileVariants({ size })}>
+              <Icon
+                svg={UploadFileIcon}
+                className={inputSingleFileIconVariants()}
+              />
+              <Text
+                variant="label-medium"
+                className="text-placeholder text-center"
+              >
+                Arraste o arquivo aqui <br /> ou clique para selecionar
+              </Text>
+            </div>
           </div>
 
-          <button
-            type="button"
-            className={textVariants({
-              variant: "label-small",
-              className: "text-accent-red cursor-pointer hover:underline",
-            })}
-          >
-            Remover
-          </button>
+          {error && (
+            <Text variant="label-small" className="text-accent-red">
+              Erro no campo
+            </Text>
+          )}
+        </>
+      ) : (
+        <div className="flex gap-3 items-center border border-solid border-border-primary mt-5 p-3 rounded">
+          <Icon svg={FileImageIcon} className="fill-white w-6 h-6" />
+
+          <div className="flex flex-col items-start">
+            <div className="truncate max-w-80">
+              <Text variant="label-medium" className="text-placeholder">
+                {formFile.name}
+              </Text>
+            </div>
+
+            <button
+              type="button"
+              className={textVariants({
+                variant: "label-small",
+                className: "text-accent-red cursor-pointer hover:underline",
+              })}
+              onClick={() => form.setValue(name, undefined)}
+            >
+              Remover
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }
