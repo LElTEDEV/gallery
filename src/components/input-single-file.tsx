@@ -4,7 +4,7 @@ import Icon from "./icon";
 import Text from "./text";
 
 import UploadFileIcon from "../assets/icons/upload-file.svg?react";
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 
 export const inputSingleFileVariants = tv({
   base: "flex flex-col items-center justify-center w-full border border-solid border-border-primary group-hover:border-border-active rounded-lg gap-1 transition",
@@ -34,9 +34,11 @@ export const inputSingleFileIconVariants = tv({
 interface InputSingleFileProps
   extends
     VariantProps<typeof inputSingleFileVariants>,
-    Omit<ComponentProps<"input">, "size"> {}
+    Omit<ComponentProps<"input">, "size"> {
+  error?: ReactNode;
+}
 
-export function InputSingleFile({ size }: InputSingleFileProps) {
+export function InputSingleFile({ size, error }: InputSingleFileProps) {
   return (
     <div>
       <div className="w-full relative group cursor-pointer">
@@ -55,6 +57,12 @@ export function InputSingleFile({ size }: InputSingleFileProps) {
           </Text>
         </div>
       </div>
+
+      {error && (
+        <Text variant="label-small" className="text-accent-red">
+          Erro no campo
+        </Text>
+      )}
     </div>
   );
 }
