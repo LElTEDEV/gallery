@@ -8,8 +8,13 @@ import Button from "./components/button";
 import Divider from "./components/divider";
 import ButtonIcon from "./components/button-icon";
 import { InputText } from "./components/input-text";
+import { InputCheckbox } from "./components/input-checkbox";
+import { InputSingleFile } from "./components/input-single-file";
+import { useForm } from "react-hook-form";
 
 export default function App() {
+  const form = useForm();
+
   return (
     <div className="grid gap-7 p-6">
       <div className="flex gap-3">
@@ -54,6 +59,19 @@ export default function App() {
 
       <div>
         <InputText placeholder="Buscar foto" icon={SearchIcon} />
+      </div>
+
+      <div>
+        <InputCheckbox />
+      </div>
+
+      <div>
+        <InputSingleFile
+          form={form}
+          {...form.register("file")}
+          allowedExtensions={["png", "jpeg", "jpg"]}
+          maxFileSizeInMB={50}
+        />
       </div>
     </div>
   );
