@@ -1,14 +1,14 @@
 import Container from "../components/container";
-import { AlbumsFilter } from "../contexts/albums/components/albums-filter";
 import { PhotosList } from "../contexts/photos/components/photos-list";
+import { AlbumsFilter } from "../contexts/albums/components/albums-filter";
 
 export function PageHome() {
   return (
     <Container>
       <AlbumsFilter
         albums={[
-          { id: "123", title: "Viagens" },
-          { id: "123", title: "Comidas" },
+          { id: "123", title: "Viagem" },
+          { id: "321", title: "Natureza" },
         ]}
       />
 
