@@ -1,9 +1,52 @@
-import Text from "../components/text";
+import Container from "../components/container";
+import { PhotoWidget } from "../contexts/photos/components/photo-widget";
+import type { Photo } from "../contexts/photos/models/photo";
 
 export function PageHome() {
   return (
-    <div>
-      <Text variant="heading-medium">Página inicial!</Text>
-    </div>
+    <Container>
+      <div className="grid grid-cols-4 gap-9">
+        <PhotoWidget
+          photo={{
+            id: "123",
+            title: "Olá Mundo",
+            imageId: "portrait-tower.png",
+            albums: [
+              { id: "123", title: "Album 1" },
+              { id: "321", title: "Album 2" },
+              { id: "123123", title: "Album 3" },
+            ],
+          }}
+        />
+
+        <PhotoWidget
+          photo={{
+            id: "123",
+            title: "Olá Mundo",
+            imageId: "portrait-tower.png",
+            albums: [
+              { id: "123", title: "Album 1" },
+              { id: "321", title: "Album 2" },
+              { id: "123123", title: "Album 3" },
+            ],
+          }}
+        />
+
+        <PhotoWidget
+          photo={{
+            id: "123",
+            title: "Olá Mundo",
+            imageId: "portrait-tower.png",
+            albums: [
+              { id: "123", title: "Album 1" },
+              { id: "321", title: "Album 2" },
+              { id: "123123", title: "Album 3" },
+            ],
+          }}
+        />
+
+        <PhotoWidget photo={{} as Photo} loading />
+      </div>
+    </Container>
   );
 }
