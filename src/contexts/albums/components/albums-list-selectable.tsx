@@ -1,9 +1,10 @@
-import type { Album } from "../models/album";
-import type { Photo } from "../../photos/models/photo";
 import Text from "../../../components/text";
-import { InputCheckbox } from "../../../components/input-checkbox";
 import Divider from "../../../components/divider";
 import Skeleton from "../../../components/skeleton";
+import { InputCheckbox } from "../../../components/input-checkbox";
+
+import type { Album } from "../models/album";
+import type { Photo } from "../../photos/models/photo";
 
 interface AlbumsListSelectableProps {
   loading?: boolean;
@@ -16,6 +17,22 @@ export function AlbumsListSelectable({
   loading,
   photo,
 }: AlbumsListSelectableProps) {
+  function isChecked(albumId: string) {
+    return photo?.albums?.some((album) => album.id === albumId);
+  }
+
+  function handlePhotoOnAlbums(albumId: string) {
+    let albumsIds = [];
+
+    if (isChecked(albumId)) {
+      albumsIds = photo.albums
+        .filter((album) => album.id !== albumId)
+        .map((album) => album.id);
+    } else {
+      albumsIds = [...photo.albums.map((album) => album.id), albumId];
+    }
+  }
+
   return (
     <ul className="flex flex-col gap-4">
       {!loading &&
@@ -26,7 +43,11 @@ export function AlbumsListSelectable({
               <Text variant="paragraph-large" className="truncate">
                 {album.title}
               </Text>
-              <InputCheckbox />
+
+              <InputCheckbox
+                defaultChecked={isChecked(album.id)}
+                onClick={() => handlePhotoOnAlbums(album.id)}
+              />
             </div>
 
             {index !== albums.length - 1 && <Divider className="mt-4" />}
